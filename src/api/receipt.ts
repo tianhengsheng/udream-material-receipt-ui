@@ -57,10 +57,10 @@ export async function addExceptionReport(p: { matrlApplyItemId: string; matrlId?
   return r.data;
 }
 
-/** craftsman 下班前置校验（硬拦截入口） */
+/** craftsman 下班前置校验（硬拦截入口；@RequestBody JSON） */
 export async function precheckDuty(p: { craftsmanUid: string; storeId: string; roleType: number; isReport?: number; isLeadStores?: number; testStatus?: number }) {
-  const r = await http.post<Resp<unknown>>('/craftsman/apiCraftsman/attendanceProduceService/precheckCraftsmanDuty', null,
-    { params: { isReport: 0, ...p }, _silent: true });
+  const r = await http.post<Resp<{ kinds?: number; jump?: string } | string>>('/apiCraftsman/attendanceProduceService/precheckCraftsmanDuty',
+    { isReport: 0, isLeadStores: 0, testStatus: 0, ...p }, { _silent: true });
   return r.data;
 }
 

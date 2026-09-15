@@ -691,3 +691,34 @@ body {
 
 /* 后台·采购订单：取消发货行 */
 .pc-row-canceled td { background: #fffbe6 !important; }
+
+/* ---------- 店长·上下班打卡（真机） ---------- */
+.ck-page { background: #f4f5f7; min-height: 100%; font-size: 12px; color: #1c1c1e; padding-bottom: 60px; position: relative; }
+.ck-exc { background: #fdecec; color: #e0404a; display: flex; align-items: center; gap: 8px; padding: 8px 12px; }
+.ck-exc .ic { width: 16px; height: 16px; border-radius: 50%; background: #e0404a; color: #fff; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+.ck-exc .sp { flex: 1; }
+.ck-card { margin: 10px 10px 0; background: #fff; border-radius: 8px; padding: 12px; }
+.ck-card .r1 { display: flex; align-items: center; }
+.ck-card .d { font-size: 16px; font-weight: 700; flex: 1; }
+.ck-card .st { background: #fdecec; color: #e0404a; border-radius: 3px; padding: 2px 8px; font-size: 12px; }
+.ck-card .st.off { background: #eceef1; color: #666; }
+.ck-card .shift { color: #666; margin-top: 6px; }
+.ck-line { margin: 12px 10px 0; padding: 12px 12px 4px; background: #fff; border-radius: 8px; min-height: 120px; }
+.ck-line .it { display: flex; gap: 10px; align-items: center; padding: 4px 0; }
+.ck-line .it .dot { width: 6px; height: 6px; border-radius: 50%; background: #1c1c1e; }
+.ck-line .empty { color: #999; text-align: center; padding: 30px 0; }
+.ck-tips { margin: 10px 10px 0; color: #666; font-size: 11px; line-height: 18px; }
+.ck-tips .red { color: #e0404a; }
+.ck-btns { display: flex; gap: 10px; justify-content: center; margin: 18px 10px 0; }
+.ck-btns .b { border-radius: 22px; padding: 9px 26px; font-size: 14px; font-weight: 600; color: #fff; background: linear-gradient(90deg, #4aa3ff, #2f6bff); cursor: pointer; box-shadow: 0 4px 10px rgba(47,107,255,.25); }
+.ck-btns .b.off { background: linear-gradient(90deg, #ff8a5b, #e0404a); box-shadow: 0 4px 10px rgba(224,64,74,.25); }
+.ck-btns .b.plain { background: #1f87b8; box-shadow: none; }
+.ck-tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 52px; background: #fff; border-top: 1px solid #eee; display: flex; }
+.ck-tabs .t { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: #666; gap: 2px; }
+.ck-tabs .t.on { color: #2f6bff; }
+.ck-tabs .t .i { font-size: 16px; }
+.ck-modal { width: 300px; background: #fff; border-radius: 14px; padding: 22px 20px 18px; text-align: center; }
+.ck-modal h4 { font-size: 16px; margin: 0 0 14px; }
+.ck-modal p { font-size: 14px; line-height: 22px; color: #333; margin: 0 0 22px; text-align: left; }
+.ck-modal .go { display: inline-block; min-width: 150px; border-radius: 24px; padding: 9px 0; font-size: 15px; color: #fff; background: linear-gradient(90deg, #2f9bff, #4ac1ff); cursor: pointer; }
+.ck-modal .close { display: block; margin: 12px auto 0; color: #999; font-size: 12px; cursor: pointer; }

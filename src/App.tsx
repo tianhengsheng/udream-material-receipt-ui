@@ -5,7 +5,7 @@ import zhCN from 'antd/locale/zh_CN';
 import { TopBar } from './components/TopBar';
 import { useSession, type ClientMode } from './store/useSession';
 import { StoreDetailPhone } from './app-mobile/StoreDetailPhone';
-import { ClockPage } from './pages/ClockPage';
+import { ClockPhone } from './app-mobile/ClockPhone';
 import { ManagerPhone } from './app-mobile/ManagerPhone';
 import { PcPurchaseOrderPage } from './pages/PcPurchaseOrderPage';
 import { ToolsPage } from './pages/ToolsPage';
@@ -15,7 +15,7 @@ import { bindNavigate } from './nav';
 const PAGES = [
   { key: 'storeDetail', client: 'app', label: '店长·申请单详情', icon: <MobileOutlined />, Comp: StoreDetailPhone },
   { key: 'manager', client: 'app', label: '区经·物料管控', icon: <MobileOutlined />, Comp: ManagerPhone },
-  { key: 'clock', client: 'app', label: '店长·打卡联动', icon: <MobileOutlined />, Comp: ClockPage },
+  { key: 'clock', client: 'app', label: '店长·上下班打卡', icon: <MobileOutlined />, Comp: ClockPhone },
   { key: 'pcPurchase', client: 'pc', label: '后台·采购订单', icon: <DesktopOutlined />, Comp: PcPurchaseOrderPage },
   { key: 'tools', client: 'pc', label: '工具·轨迹/异常', icon: <ToolOutlined />, Comp: ToolsPage },
 ] as const satisfies ReadonlyArray<{ key: string; client: ClientMode; label: string; icon: React.ReactNode; Comp: ComponentType }>;
