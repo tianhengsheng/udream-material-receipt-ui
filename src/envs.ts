@@ -21,7 +21,8 @@ export const ENV_PRESETS = [
 
 export type EnvKey = (typeof ENV_PRESETS)[number]['key'];
 
-export const DEFAULT_ENV: EnvKey = 'local';
+/** 打开默认开发环境（2026-09-15 用户定）；local 需手动切 */
+export const DEFAULT_ENV: EnvKey = 'dev';
 
 export function getEnv(key: EnvKey) {
   return ENV_PRESETS.find((e) => e.key === key) || ENV_PRESETS[0];

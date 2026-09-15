@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import { Alert, Button, Descriptions, Input, Modal, Popover, Radio, Space, Tabs, Tag, message } from 'antd';
+import { Alert, Button, Descriptions, Input, InputNumber, Modal, Popover, Radio, Space, Tabs, Tag, message } from 'antd';
 import dayjs from 'dayjs';
 import {
   DeleteOutlined,
@@ -26,7 +26,7 @@ const isExpired = (u?: Account) => !!u?.expiresAt && u.expiresAt < Date.now();
 
 export function TopBar() {
   const {
-    currentEnv, setCurrentEnv, setClientMode, users, clientMode,
+    currentEnv, setCurrentEnv, localPort, setLocalPort, setClientMode, users, clientMode,
     pcUserId, appUserId, miniUserId, upsertUser, removeUser, assignSlot, setAccountRole, setAccountRoleName, importSnapshot,
   } = useSession();
 
@@ -197,7 +197,11 @@ export function TopBar() {
         {ENV_PRESETS.map((e) => (
           <Radio key={e.key} value={e.key}>
             <Space size={6}>
-              <strong>{e.label}</strong>
+              <strong>{e.key === 'local' ? '本地网关' : e.label}</strong>
+              {e.key === 'local' && (
+                <InputNumber size="small" min={1} max={65535} controls={false} style={{ width: 72 }} value={localPort} data-testid="env.localPort"
+                  onClick={(ev) => ev.stopPropagation()} onChange={(v) => setLocalPort(Number(v) || 20000)} />
+              )}
               <span style={{ color: '#999', fontSize: 12 }}>{e.target}</span>
             </Space>
           </Radio>
@@ -305,7 +309,7 @@ export function TopBar() {
     >
       <Popover content={envContent} title="切换环境" trigger="click" placement="bottomLeft">
         <Button size="small" icon={<GlobalOutlined />}>
-          {currentEnvPreset.label}
+          {currentEnvPreset.key === 'local' ? `本地网关${localPort}` : currentEnvPreset.label}
         </Button>
       </Popover>
 

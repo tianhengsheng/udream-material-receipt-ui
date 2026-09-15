@@ -1,4 +1,5 @@
 import { http } from './client';
+import { useSession } from '../store/useSession';
 import { bigIntSafeParse, pick } from './common';
 import type { PageResp, Resp } from '../types';
 import type {
@@ -91,7 +92,7 @@ export async function purOrderList(q: { status?: number; storeName?: string; app
   return { rows: (pick(r.data) as Record<string, unknown>[] | undefined) ?? r.data?.records ?? [], total: r.data?.page?.total ?? r.data?.total };
 }
 
-export const expressTemplateUrl = (env: string) => `/env/${env}/franchise/apiUnified/receipt/expressTemplate`;
+export const expressTemplateUrl = (env: string) => `/env/${env}/franchise/apiUnified/receipt/expressTemplate${env === 'local' ? `?_lp=${useSession.getState().localPort || 20000}` : ''}`;
 
 export async function expressImport(file: File) {
   const fd = new FormData();

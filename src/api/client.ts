@@ -109,6 +109,9 @@ http.interceptors.request.use(async (cfg) => {
   if (cfg.url && !cfg.url.startsWith(`/env/`) && !/^https?:\/\//.test(cfg.url)) {
     cfg.url = `/env/${currentEnv}${cfg.url}`;
   }
+  if (currentEnv === 'local' && cfg.headers) {
+    cfg.headers.set('x-local-port', String(s.localPort || 20000));
+  }
   const attStr = (cfg.headers && (cfg.headers as any).get?.('att')) || '';
   const attPreview = attStr ? `${attStr.slice(0, 8)}...${attStr.slice(-8)} (len=${attStr.length})` : '(empty)';
   // eslint-disable-next-line no-console

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { DEFAULT_ENV, bucketKey, type EnvKey } from '../envs';
+import { SEED_ACCOUNTS, SEED_BUCKET, SEED_DEFAULT_APP_ID } from '../seedAccounts';
 
 /** 客户端类型：PC 后台页 / App 手艺人页 / mini 小程序顾客页（决定发哪个端 token）。 */
 export type ClientMode = 'pc' | 'app' | 'mini';
@@ -62,6 +63,9 @@ export interface AccountSnapshot {
 
 interface SessionState {
   currentEnv: EnvKey;
+  /** local 环境本地网关端口（页面可改，默认 20000） */
+  localPort: number;
+  setLocalPort: (p: number) => void;
   clientMode: ClientMode;
 
   // —— 源数据：账号按桶键隔离（桶键=env.group ?? env）。同 group 的环境共用一桶（local/dev 同库互通），
@@ -133,6 +137,8 @@ export const useSession = create<SessionState>()(
   persist(
     (set, get) => ({
       currentEnv: DEFAULT_ENV,
+      localPort: 20000,
+      setLocalPort: (p) => set({ localPort: p > 0 ? p : 20000 }),
       clientMode: 'pc',
       accountsByEnv: {},
       activeByEnv: {},
@@ -246,10 +252,11 @@ export const useSession = create<SessionState>()(
     }),
     {
       name: 'udream-material-receipt-ui-session',
-      version: 2,
+      version: 3,
       // 只持久化源数据；派生镜像在 merge 时重算（避免存冗余/陈旧）
       partialize: (s) => ({
         currentEnv: s.currentEnv,
+        localPort: s.localPort,
         clientMode: s.clientMode,
         accountsByEnv: s.accountsByEnv,
         activeByEnv: s.activeByEnv,
@@ -259,17 +266,26 @@ export const useSession = create<SessionState>()(
         const p = (persisted || {}) as Partial<SessionState>;
         const base = {
           currentEnv: p.currentEnv ?? DEFAULT_ENV,
+          localPort: p.localPort ?? 20000,
           clientMode: p.clientMode ?? 'pc',
           accountsByEnv: p.accountsByEnv || {},
           activeByEnv: p.activeByEnv || {},
         };
+        // v2→v3：默认环境改为 dev，老快照的 currentEnv 重置一次
+        if (version < 3) base.currentEnv = DEFAULT_ENV;
         if (version >= 2) return base;
         return { ...base, ...foldLegacyBuckets(base) };
       },
       // 合并持久化源数据后，重算当前环境派生镜像
       merge: (persisted, current) => {
         const s = { ...current, ...(persisted as Partial<SessionState>) } as SessionState;
-        return { ...s, ...derive(s.accountsByEnv || {}, s.activeByEnv || {}, s.currentEnv, s.clientMode) };
+        // 默认账号补齐：devShared 桶缺哪个补哪个（不覆盖已有）；App 槽位为空则激活默认店长
+        const bucket = [...((s.accountsByEnv || {})[SEED_BUCKET] || [])];
+        SEED_ACCOUNTS.forEach((a) => { if (!bucket.some((x) => x.id === a.id)) bucket.push(a); });
+        s.accountsByEnv = { ...(s.accountsByEnv || {}), [SEED_BUCKET]: bucket };
+        const slots = { ...EMPTY_SLOTS, ...((s.activeByEnv || {})[SEED_BUCKET] || {}) };
+        if (!slots.appUserId) s.activeByEnv = { ...(s.activeByEnv || {}), [SEED_BUCKET]: { ...slots, appUserId: SEED_DEFAULT_APP_ID } };
+        return { ...s, ...derive(s.accountsByEnv, s.activeByEnv || {}, s.currentEnv, s.clientMode) };
       },
     },
   ),
