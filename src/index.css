@@ -688,3 +688,6 @@ body {
 .mg-store .mr-pkg { margin: 8px 0 0; border: 1px solid #e6f0ff; }
 .mg-store .mr-pkg.overdue { border-color: #ffb37a; }
 .mg-store .mr-item .rt .red { color: #e0404a; font-weight: 700; }
+
+/* 后台·采购订单：取消发货行 */
+.pc-row-canceled td { background: #fffbe6 !important; }
