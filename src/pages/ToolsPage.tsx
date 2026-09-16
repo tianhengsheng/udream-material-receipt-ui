@@ -23,7 +23,7 @@ export function ToolsPage() {
 
   return (
     <div style={{ padding: 12 }}>
-      <Card size="small" title="模拟快递鸟推送（apiUnified/receipt/mockTrack，仅 Mock 模式；state 为内部 TrackState）">
+      <Card size="small" title="模拟快递鸟推送（apiUnified/receipt/mockTrack，非 release 环境注册；state 为内部 ExpressTrackState）">
         <Space wrap>
           <Input data-testid="tools.expressNo" style={{ width: 200 }} placeholder="快递单号" value={expressNo} onChange={(e) => setExpressNo(e.target.value)} />
           <span>首条轨迹时间</span><DatePicker showTime value={firstTime} onChange={(v) => v && setFirstTime(v)} />
@@ -38,9 +38,10 @@ export function ToolsPage() {
             { title: 'id', dataIndex: 'id', render: (v) => String(v) },
             { title: '门店', dataIndex: 'storeName' },
             { title: '物料', dataIndex: 'matrlName' },
-            { title: '类型', dataIndex: 'typeStr' },
+            { title: '类型', dataIndex: 'type', render: (v: number) => ['破损', '少货', '与申请不符', '未收到'][v] ?? v },
             { title: '说明', dataIndex: 'remark' },
-            { title: '上报时间', dataIndex: 'createTimeStr' },
+            { title: '上报人', dataIndex: 'createName' },
+            { title: '上报时间', dataIndex: 'createTime' },
             { title: '操作', render: (_, r) => <Button size="small" type="primary" onClick={() => handleException(String(r.id), '自测处理完成').then(() => { message.success('已处理'); loadExc(); })}>处理完成</Button> },
           ]} />
       </Card>
