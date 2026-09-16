@@ -7,14 +7,14 @@ import { exceptionList, handleException, mockTrack } from '../api/receipt';
 export function ToolsPage() {
   const [expressNo, setExpressNo] = useState('');
   const [firstTime, setFirstTime] = useState<Dayjs>(dayjs().subtract(1, 'day'));
-  const [state, setState] = useState('0');
+  const [state, setState] = useState('IN_TRANSIT');
   const [context, setContext] = useState('【自测】快件运输中');
   const [excRows, setExcRows] = useState<Record<string, unknown>[]>([]);
 
   const send = async () => {
     if (!expressNo) return message.warning('快递单号必填');
     await mockTrack(expressNo, { state, nodes: [
-      { time: dayjs().format('YYYY-MM-DD HH:mm:ss'), context, area: '深圳市', statusDesc: state === '3' ? '签收' : '在途' },
+      { time: dayjs().format('YYYY-MM-DD HH:mm:ss'), context, area: '深圳市', statusDesc: state === 'SIGNED' ? '签收' : '在途' },
       { time: firstTime.format('YYYY-MM-DD HH:mm:ss'), context: '【自测】快件已揽收', area: '上海市', statusDesc: '揽收' },
     ] });
     message.success('轨迹已投递（首条 = 首条轨迹日，触发重算）');
@@ -23,11 +23,11 @@ export function ToolsPage() {
 
   return (
     <div style={{ padding: 12 }}>
-      <Card size="small" title="模拟快递100 回调（apiUnified/receipt/mockTrack，仅 Mock 模式）">
+      <Card size="small" title="模拟快递鸟推送（apiUnified/receipt/mockTrack，仅 Mock 模式；state 为内部 TrackState）">
         <Space wrap>
           <Input data-testid="tools.expressNo" style={{ width: 200 }} placeholder="快递单号" value={expressNo} onChange={(e) => setExpressNo(e.target.value)} />
           <span>首条轨迹时间</span><DatePicker showTime value={firstTime} onChange={(v) => v && setFirstTime(v)} />
-          <Select style={{ width: 120 }} value={state} onChange={setState} options={[{ value: '0', label: '0 在途' }, { value: '1', label: '1 揽收' }, { value: '5', label: '5 派件' }, { value: '3', label: '3 签收' }]} />
+          <Select style={{ width: 120 }} value={state} onChange={setState} options={[{ value: 'NONE', label: '暂无轨迹' }, { value: 'COLLECTED', label: '已揽收' }, { value: 'IN_TRANSIT', label: '在途' }, { value: 'SIGNED', label: '签收(终态)' }, { value: 'PROBLEM', label: '问题件' }]} />
           <Input style={{ width: 240 }} value={context} onChange={(e) => setContext(e.target.value)} />
           <Button type="primary" data-testid="tools.sendTrack" onClick={send}>投递轨迹</Button>
         </Space>

@@ -93,4 +93,5 @@ export interface ApplyCard {
 }
 
 export interface TrackNode { time: string; context: string; area?: string; statusDesc?: string }
+/** state = 内部 TrackState 名：NONE/COLLECTED/IN_TRANSIT/SIGNED/PROBLEM */
 export interface TrackResult { state: string; nodes: TrackNode[]; rawJson?: string }

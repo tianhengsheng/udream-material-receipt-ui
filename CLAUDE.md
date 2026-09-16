@@ -18,4 +18,4 @@
 - 账号分桶 useSession（桶键=env.group??env）；App 页发 App token，后台/工具页发 PC token（App.tsx PAGES.client）。
 - 默认账号 `src/seedAccounts.ts`（devShared 桶：黄锟店长/朱俊峰区经/王贵森店长，密码 udream@@0），打开即补齐、删了会回来；只带密码不带 token，首个请求静默登录。只放测试库账号。
 - 19 位雪花 id 一律字符串（bigIntSafeParse）。
-- 快递100 走 Mock（express.kd100.enabled=false），轨迹用「工具」页 mockTrack 投递。
+- 快递鸟走 Mock（express.kdniao.enabled 未配），轨迹用「工具」页 mockTrack 投递，state 传内部 TrackState 名。
