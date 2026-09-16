@@ -189,7 +189,7 @@ function EditModal({ row, onCancel, onOk, onDelete }: { row: Row; onCancel: () =
         <Form.Item label="采购单价" name="purPrice"><InputNumber min={0} style={{ width: '100%' }} /></Form.Item>
         <Form.Item label="应收加盟商单价" name="supplierPrice"><InputNumber min={0} style={{ width: '100%' }} /></Form.Item>
         <Form.Item label="快递公司" name="expressCompany"><Select allowClear options={EXPRESS_COMPANIES.map((c) => ({ value: c, label: c }))} /></Form.Item>
-        <Form.Item label={<span>快递单号<NewTag /></span>} name="expressNo" extra={<span style={{ color: '#d46b08' }}>有变化才校验：非已发货 10111 / 超发货 5 天 10112；成功即订阅快递100</span>}><Input style={NEW} data-testid="pc.editExpressNo" /></Form.Item>
+        <Form.Item label={<span>快递单号<NewTag /></span>} name="expressNo" extra={<span style={{ color: '#d46b08' }}>有变化才校验：非已发货 10111 / 超发货 5 天 10112；成功即经 external 订阅快递鸟</span>}><Input style={NEW} data-testid="pc.editExpressNo" /></Form.Item>
         <Form.Item label="备注" name="remark"><Input.TextArea rows={2} /></Form.Item>
       </Form>
     </Modal>
