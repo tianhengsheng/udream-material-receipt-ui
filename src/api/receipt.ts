@@ -3,7 +3,7 @@ import { useSession } from '../store/useSession';
 import { bigIntSafeParse, pick } from './common';
 import type { PageResp, Resp } from '../types';
 import type {
-  ApplyCard, ApplyHeader, ManagerSummary, OverdueKinds, OverdueStore, ReceiptPackages, StoreStats, TrackResult, UrgeResult,
+  ApplyCard, ManagerSummary, OverdueKinds, OverdueStore, ReceiptPackages, StoreStats, TrackResult, UrgeResult,
 } from '../types/receipt';
 
 const BIG = { transformResponse: [bigIntSafeParse] };
@@ -21,12 +21,6 @@ export async function historyApplies(): Promise<{ rows: ApplyCard[]; total: numb
   const r = await http.post<PageResp<ApplyCard>>('/mgt/pur/apply/queryHistoryApplys', { pageNum: 1, pageSize: 50, counted: true }, BIG);
   const rows = (pick(r.data) as ApplyCard[] | undefined) ?? r.data?.records ?? [];
   return { rows, total: r.data?.page?.total ?? r.data?.total ?? rows.length };
-}
-
-/** 老详情头部（沿用；applyItemVos 忽略） */
-export async function applyHeader(applyId: string): Promise<ApplyHeader | undefined> {
-  const r = await http.post<Resp<ApplyHeader>>('/mgt/pur/apply/getMatrlApplyDetail', null, { params: { applyId }, ...BIG });
-  return pick(r.data);
 }
 
 export async function packages(applyId: string, tab?: number, keyword?: string): Promise<ReceiptPackages | undefined> {

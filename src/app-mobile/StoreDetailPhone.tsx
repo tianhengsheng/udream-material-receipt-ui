@@ -3,8 +3,8 @@ import { Button, Card, Input, Select, Space, Switch, message } from 'antd';
 import { PhoneFrame } from '../components/PhoneFrame';
 import { StoreApplyListPhone } from './StoreApplyListPhone';
 import { AppSimLayout } from '../components/AppSimLayout';
-import { addExceptionReport, applyHeader, confirmReceipt, currentApplies, packages } from '../api/receipt';
-import type { ApplyCard, ApplyHeader, ReceiptItem, ReceiptPackage, ReceiptPackages } from '../types/receipt';
+import { addExceptionReport, confirmReceipt, currentApplies, packages } from '../api/receipt';
+import type { ApplyCard, ReceiptItem, ReceiptPackage, ReceiptPackages } from '../types/receipt';
 
 const LS_KEY = 'mr-store-applyId';
 /** 类型色块：按类型名稳定取色 */
@@ -21,7 +21,6 @@ export function StoreDetailPhone() {
   const [applyId, setApplyId] = useState(localStorage.getItem(LS_KEY) || '');
   const [view, setView] = useState<'list' | 'detail'>(localStorage.getItem(LS_KEY) ? 'detail' : 'list');
   const [cards, setCards] = useState<ApplyCard[]>([]);
-  const [header, setHeader] = useState<ApplyHeader & { highestStandard?: number }>();
   const [data, setData] = useState<ReceiptPackages>();
   const [tab, setTab] = useState(0);
   const [kw, setKw] = useState('');
@@ -43,13 +42,13 @@ export function StoreDetailPhone() {
       setLoading(false);
     }
   };
-  /** 进单：头部（老详情）一次 + 列表 */
+  /** 进单：头部随 packages 一并返回 */
   const load = async (id = applyId, t = tab, k = kw) => {
     if (!id) return;
     localStorage.setItem(LS_KEY, id);
-    applyHeader(id).then((h) => setHeader(h as ApplyHeader)).catch(() => setHeader(undefined));
     await loadPackages(id, t, k);
   };
+  const header = data;
   useEffect(() => { loadList(); if (applyId) load(); }, []);
 
   const receivable = useMemo(() => (data?.packages || []).flatMap((p) => p.items).filter((i) => i.canReceive).map((i) => i.applyItemId), [data]);
@@ -66,7 +65,7 @@ export function StoreDetailPhone() {
 
   const body = (
     <div className="mr-page" data-testid="store.phone">
-      {header?.tag === 1 && <div className="mr-cost"><span style={{ background: '#e0404a', color: '#fff', borderRadius: '50%', width: 16, height: 16, fontSize: 11, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>!</span>当月申请成本过高 (标准 {header.highestStandard ?? 0} 元)</div>}
+      {header?.tag === 1 && <div className="mr-cost"><span style={{ background: '#e0404a', color: '#fff', borderRadius: '50%', width: 16, height: 16, fontSize: 11, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>!</span>当月申请成本过高 (标准 {header.highestStandard ?? 0} 元，约超出 {header.excessAmount ?? 0} 元)</div>}
       {data?.fixedTip && <div className="mr-tip"><span className="ic">·</span><span>{data.fixedTip}</span></div>}
       {header && (
         <div className="mr-head">

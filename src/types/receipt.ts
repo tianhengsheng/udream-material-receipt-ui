@@ -16,7 +16,8 @@ export interface ReceiptItem {
   applyNum?: number;
   deliverNum?: number;
   receivedNum?: number;
-  itemStatus?: number;
+  matrlStatus?: number;
+  matrlTypeCode?: string;
   overdue?: boolean;
   overdueDays?: number;
   shipDate?: string;
@@ -51,6 +52,21 @@ export interface ReceiptPackage {
 }
 
 export interface ReceiptPackages {
+  /** 申请单头部（后端并入 packages，2026-09-16） */
+  applyId?: string;
+  applyNo?: string;
+  applyTime?: string;
+  storeId?: string;
+  storeName?: string;
+  status?: number;
+  tag?: number;
+  turnover?: number;
+  highestStandard?: number;
+  requestedAmount?: number;
+  excessAmount?: number;
+  errorReason?: string;
+  errorReasonUserName?: string;
+  errorReasonTime?: string;
   fixedTip?: string;
   overdueBanner?: string | null;
   tabs: ReceiptTab[];
@@ -58,17 +74,6 @@ export interface ReceiptPackages {
 }
 
 export interface OverdueKinds { kinds: number; applyIds: string[] }
-
-/** 老详情接口头部（PurMaterialApplyVo 只取用到的字段） */
-export interface ApplyHeader {
-  id?: string;
-  applyNo?: string;
-  applyTime?: string;
-  storeId?: string;
-  storeName?: string;
-  status?: number;
-  tag?: number;
-}
 
 export interface ManagerSummary { hasOverdue: boolean; storeCount: number; tipText?: string }
 
